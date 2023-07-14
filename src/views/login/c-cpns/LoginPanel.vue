@@ -30,17 +30,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import PaneAccount from "./PaneAccount.vue"
 import PanePhone from "./PanePhone.vue"
+import { localCache } from "@/utils/cache"
 
 const activeName = ref("account")
-const isKeepPwd = ref(false)
+const isKeepPwd = ref<boolean>(localCache.getCache("isKeepPwd") ?? false)
+watch(isKeepPwd, (newValue) => {
+  localCache.setCache("isKeepPwd", newValue)
+})
 const accountRef = ref<InstanceType<typeof PaneAccount>>()
 
 const handleLoginClick = () => {
   if (activeName.value === "account") {
-    accountRef.value?.loginAction()
+    accountRef.value?.loginAction(isKeepPwd.value)
   } else {
     console.log("手机登录")
   }

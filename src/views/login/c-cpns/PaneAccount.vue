@@ -16,10 +16,14 @@ import { ref, reactive } from "vue"
 import { ElMessage } from "element-plus"
 import type { FormInstance, FormRules } from "element-plus"
 import useLoginStore from "@/store/login/login"
+import type { IAccount } from "@/types"
+import { localCache } from "@/utils/cache"
 
-const account = reactive({
-  name: "",
-  password: ""
+const CHANGE_NAME = "name"
+const CHANGE_PASSWORD = "password"
+const account = reactive<IAccount>({
+  name: localCache.getCache(CHANGE_NAME) ?? "",
+  password: localCache.getCache(CHANGE_PASSWORD) ?? ""
 })
 
 const accountRules: FormRules = {
@@ -35,17 +39,24 @@ const accountRules: FormRules = {
 
 const formRef = ref<FormInstance>()
 const loginStore = useLoginStore()
-const loginAction = () => {
+const loginAction = (isKeepPwd: boolean) => {
   formRef?.value?.validate((valid: boolean) => {
     if (valid) {
       const name = account.name
       const password = account.password
       loginStore.loginAccountAction({ name, password })
+
+      if (isKeepPwd) {
+        localCache.setCache(CHANGE_NAME, name)
+        localCache.setCache(CHANGE_PASSWORD, password)
+      } else {
+        localCache.removeCache(CHANGE_NAME)
+        localCache.removeCache(CHANGE_PASSWORD)
+      }
     } else {
       ElMessage.error("请输入正确格式的帐号或密码")
     }
   })
-  console.log(account.name, account.password)
 }
 
 defineExpose({
