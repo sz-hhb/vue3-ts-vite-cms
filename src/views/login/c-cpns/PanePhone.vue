@@ -7,7 +7,7 @@
       <el-form-item label="验证码">
         <div class="verify-code">
           <el-input />
-          <el-button class="get-code">获取验证码</el-button>
+          <el-button class="get-code" type="primary">获取验证码</el-button>
         </div>
       </el-form-item>
     </el-form>
