@@ -1,25 +1,34 @@
 import { defineStore } from "pinia"
-import { loginAccountRequest } from "@/service/login/login"
+import { loginAccountRequest, getUserInfoById, getUserMenusByRoleId } from "@/service/login/login"
 import type { IAccount } from "@/types"
 import { localCache } from "@/utils/cache"
+import { TOKEN } from "@/global/constants"
 import router from "@/router"
 
-const TOKEN = "token"
+interface ILoginState {
+  token: string
+  userInfo: any
+  userMenu: any
+}
 
 const useLoginStore = defineStore("login", {
-  state: () => ({
-    id: "",
-    name: "",
-    token: localCache.getCache(TOKEN) ?? ""
+  state: (): ILoginState => ({
+    token: localCache.getCache(TOKEN) ?? "",
+    userInfo: {},
+    userMenu: []
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
       const loginRes = await loginAccountRequest(account)
-      this.id = loginRes.data.id
-      this.name = loginRes.data.name
+      const id = loginRes.data.id
       this.token = loginRes.data.token
 
       localCache.setCache(TOKEN, this.token)
+      const userInfoRes = await getUserInfoById(id)
+      this.userInfo = userInfoRes.data
+
+      const userMenuRes = await getUserMenusByRoleId(this.userInfo.role.id)
+      this.userMenu = userMenuRes.data
 
       router.push("/main")
     }
