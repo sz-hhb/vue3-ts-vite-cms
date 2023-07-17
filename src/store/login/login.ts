@@ -14,21 +14,24 @@ interface ILoginState {
 const useLoginStore = defineStore("login", {
   state: (): ILoginState => ({
     token: localCache.getCache(TOKEN) ?? "",
-    userInfo: {},
-    userMenu: []
+    userInfo: localCache.getCache("userInfo") ?? {},
+    userMenu: localCache.getCache("userMenu") ?? []
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
       const loginRes = await loginAccountRequest(account)
       const id = loginRes.data.id
       this.token = loginRes.data.token
-
       localCache.setCache(TOKEN, this.token)
+
       const userInfoRes = await getUserInfoById(id)
       this.userInfo = userInfoRes.data
 
       const userMenuRes = await getUserMenusByRoleId(this.userInfo.role.id)
       this.userMenu = userMenuRes.data
+
+      localCache.setCache("userInfo", userInfoRes.data)
+      localCache.setCache("userMenu", userMenuRes.data)
 
       router.push("/main")
     }
