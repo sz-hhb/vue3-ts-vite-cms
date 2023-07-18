@@ -68,7 +68,7 @@ interface IBreadcrumbs {
   path: string
 }
 /**
- *
+ * 根据路径匹配对应的面包屑
  * @param path 需要匹配的路径
  * @param userMenus 所有菜单
  * @returns 面包屑的路径数组
