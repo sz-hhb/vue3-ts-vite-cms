@@ -5,6 +5,7 @@ import { localCache } from "@/utils/cache"
 import { mapMenusToRoutes } from "@/utils/map-menus"
 import { TOKEN } from "@/global/constants"
 import router from "@/router"
+import useMainStore from "../main/main"
 
 interface ILoginState {
   token: string
@@ -35,6 +36,9 @@ const useLoginStore = defineStore("login", {
       localCache.setCache("userInfo", userInfoRes.data)
       localCache.setCache("userMenu", userMenuRes.data)
 
+      const mainStore = useMainStore()
+      mainStore.fetchEntireDataAction()
+
       // 菜单映射到路由 基于菜单的动态路由管理
       const routes = mapMenusToRoutes(userMenus)
       for (const route of routes) {
@@ -51,6 +55,9 @@ const useLoginStore = defineStore("login", {
         this.token = token
         this.userInfo = userInfo
         this.userMenu = userMenu
+
+        const mainStore = useMainStore()
+        mainStore.fetchEntireDataAction()
 
         const routes = mapMenusToRoutes(userMenu)
         for (const route of routes) {

@@ -63,7 +63,7 @@ class HYRequest {
   }
 
   post<T = any>(config: HYRequestConfig<T>) {
-    return this.request({ ...config, method: "POST" })
+    return this.request<T>({ ...config, method: "POST" })
   }
 
   delete<T = any>(config: HYRequestConfig<T>) {
@@ -71,7 +71,7 @@ class HYRequest {
   }
 
   patch<T = any>(config: HYRequestConfig<T>) {
-    return this.request({ ...config, method: "PATCH" })
+    return this.request<T>({ ...config, method: "PATCH" })
   }
 }
 
