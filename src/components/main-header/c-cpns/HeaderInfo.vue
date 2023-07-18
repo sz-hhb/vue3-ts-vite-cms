@@ -19,7 +19,7 @@
             :size="30"
             src="https://upload.jianshu.io/users/upload_avatars/1102036/c3628b478f06.jpeg"
           ></el-avatar>
-          <span class="name">coderwhy</span>
+          <span class="name">{{ userName }}</span>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
@@ -43,15 +43,22 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue"
 import { useRouter } from "vue-router"
 import { TOKEN } from "@/global/constants"
 import { localCache } from "@/utils/cache"
+import useLoginStore from "@/store/login/login"
 
 const router = useRouter()
 const handleExitClick = () => {
   localCache.removeCache(TOKEN)
   router.push("/login")
 }
+
+const loginStore = useLoginStore()
+const userName = computed(() => {
+  return loginStore.userInfo.name
+})
 </script>
 
 <style scoped lang="less">
