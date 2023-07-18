@@ -6,7 +6,7 @@
     </div>
     <div class="menu">
       <el-menu
-        default-active="2"
+        :default-active="defaultActive"
         class="el-menu-vertical"
         :collapse="isFold"
         background-color="#0c2135"
@@ -22,7 +22,9 @@
               <span>{{ item.name }}</span>
             </template>
             <template v-for="subItem in item.children" :key="subItem.id">
-              <el-menu-item :index="subItem.id + ''">{{ subItem.name }}</el-menu-item>
+              <el-menu-item :index="subItem.id + ''" @click="handleMenuItemClick(subItem)">
+                {{ subItem.name }}
+              </el-menu-item>
             </template>
           </el-sub-menu>
         </template>
@@ -32,12 +34,26 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue"
+import { useRoute, useRouter } from "vue-router"
 import useLoginStore from "@/store/login/login"
+import { mapPathToMenus } from "@/utils/map-menus"
 
 withDefaults(defineProps<{ isFold: boolean }>(), { isFold: false })
 
+const router = useRouter()
+const route = useRoute()
 const loginStore = useLoginStore()
 const userMenu = loginStore.userMenu
+
+const handleMenuItemClick = (item: any) => {
+  router.push(item.url)
+}
+
+const defaultActive = computed(() => {
+  const pathMenu = mapPathToMenus(route.path, userMenu)
+  return pathMenu.id + ""
+})
 </script>
 
 <style scoped lang="less">
