@@ -11,22 +11,22 @@ class Cache {
   }
 
   setCache(key: string, value: any) {
-    localStorage.setItem(key, JSON.stringify(value))
+    this.storage.setItem(key, JSON.stringify(value))
   }
 
   getCache(key: string) {
-    const value = localStorage.getItem(key)
+    const value = this.storage.getItem(key)
     if (value) {
       return JSON.parse(value)
     }
   }
 
   removeCache(key: string) {
-    localStorage.removeItem(key)
+    this.storage.removeItem(key)
   }
 
   clear() {
-    localStorage.clear()
+    this.storage.clear()
   }
 }
 
