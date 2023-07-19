@@ -8,40 +8,17 @@
     >
       <div class="form">
         <el-form :model="formData" label-width="80px" size="large">
-          <el-form-item label="用户名">
-            <el-input v-model="formData.name" prop="name" placeholder="请输入用户名" />
+          <el-form-item label="部门名称">
+            <el-input v-model="formData.name" prop="name" placeholder="请输入部门名称" />
           </el-form-item>
-          <el-form-item label="真实姓名">
-            <el-input v-model="formData.realname" prop="realname" placeholder="请输入真实姓名" />
-          </el-form-item>
-          <el-form-item v-if="isCreate" label="密码">
-            <el-input
-              v-model="formData.password"
-              prop="password"
-              placeholder="请输入密码"
-              show-password
-            />
-          </el-form-item>
-          <el-form-item label="电话号码">
-            <el-input v-model="formData.cellphone" prop="cellphone" placeholder="请输入电话号码" />
-          </el-form-item>
-          <el-form-item label="选择角色">
-            <el-select
-              v-model="formData.roleId"
-              prop="roleId"
-              placeholder="请选择角色"
-              style="width: 100%"
-            >
-              <template v-for="item in entireRoles" :key="item.id">
-                <el-option :label="item.name" :value="item.id" />
-              </template>
-            </el-select>
+          <el-form-item label="部门领导">
+            <el-input v-model="formData.leader" prop="leader" placeholder="请输入部门领导" />
           </el-form-item>
           <el-form-item label="选择部门">
             <el-select
-              v-model="formData.departmentId"
-              prop="departmentId"
-              placeholder="请选择部门"
+              v-model="formData.parentId"
+              prop="parentId"
+              placeholder="请选择上级部门"
               style="width: 100%"
             >
               <template v-for="item in entireDepartments" :key="item.id">
@@ -71,15 +48,12 @@ const dialogVisible = ref(false)
 
 const formData = reactive<any>({
   name: "",
-  realname: "",
-  password: "",
-  cellphone: "",
-  roleId: "",
-  departmentId: ""
+  leader: "",
+  parentId: ""
 })
 
 const mainStore = useMainStore()
-const { entireRoles, entireDepartments } = storeToRefs(mainStore)
+const { entireDepartments } = storeToRefs(mainStore)
 const systemStore = useSystemStore()
 
 const isCreate = ref(true)
@@ -103,9 +77,9 @@ const setModalVisible = (isNew: boolean = true, itemData?: any) => {
 const handleConfirmClick = () => {
   dialogVisible.value = false
   if (!isCreate.value) {
-    systemStore.editUserDataAction(editData.value.id, formData)
+    systemStore.editPageDataAction("department", editData.value.id, formData)
   } else {
-    systemStore.newUserDataAction(formData)
+    systemStore.newPageDataAction("department", formData)
   }
 }
 
