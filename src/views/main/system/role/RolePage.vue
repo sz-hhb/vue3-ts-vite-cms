@@ -1,9 +1,9 @@
 <template>
-  <div class="department">
+  <div class="role">
     <page-search
       :search-config="searchConfig"
-      @reset-click="handleResetClick"
       @query-click="handleQueryClick"
+      @reset-click="handleResetClick"
     />
     <page-content ref="contentRef" :content-config="contentConfig" @new-click="handleNewClick">
       <template #createAt="scope">{{ formatUTC(scope.row.createAt) }}</template>
@@ -17,39 +17,24 @@
         </el-button>
       </template>
     </page-content>
-    <page-modal :modal-config="modalConfigRef" ref="modalRef" />
+    <page-modal ref="modalRef" :modal-config="modalConfig" />
   </div>
 </template>
 
-<script setup lang="ts" name="department">
-import { computed } from "vue"
+<script setup lang="ts" name="role">
 import PageSearch from "@/components/page-search/PageSearch.vue"
 import PageContent from "@/components/page-content/PageContent.vue"
 import PageModal from "@/components/page-modal/PageModal.vue"
-import searchConfig from "./config/search.config"
-import contentConfig from "./config/content.config"
-import modalConfig from "./config/modal.config"
+import searchConfig from "../role/config/search.config"
+import contentConfig from "../role/config/content.config"
+import modalConfig from "../role/config/modal.config"
 import { formatUTC } from "@/utils/format"
-import useSystemStore from "@/store/main/system/system"
-import useMainStore from "@/store/main/main"
 import usePageContent from "@/hooks/usePageContent"
 import usePageModal from "@/hooks/usePageModal"
-
-const modalConfigRef = computed(() => {
-  const mainStore = useMainStore()
-  const departments = mainStore.entireDepartments.map((item) => {
-    return { label: item.name, value: item.id }
-  })
-  modalConfig.formItems.forEach((item) => {
-    if (item.prop === "parentId") {
-      item.options?.push(...departments)
-    }
-  })
-  return modalConfig
-})
+import useSystemStore from "@/store/main/system/system"
 
 const { contentRef, handleResetClick, handleQueryClick } = usePageContent()
-const { modalRef, handleNewClick, handleEditClick } = usePageModal()
+const { modalRef, handleEditClick, handleNewClick } = usePageModal()
 
 const systemStore = useSystemStore()
 const handleDeleteClick = (id: number) => {
