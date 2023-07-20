@@ -2,7 +2,7 @@
   <div class="user-content">
     <div class="header">
       <h3 class="title">{{ contentConfig?.header?.title ?? "数据列表" }}</h3>
-      <el-button type="primary" @click="handleNewUserClick">
+      <el-button v-if="isCreate" type="primary" @click="handleNewUserClick">
         {{ contentConfig?.header?.btnText ?? "新建列表" }}
       </el-button>
     </div>
@@ -40,6 +40,7 @@
 import { ref } from "vue"
 import { storeToRefs } from "pinia"
 import useSystemStore from "@/store/main/system/system"
+import usePermission from "@/hooks/usePermissions"
 
 interface IProps {
   contentConfig: {
@@ -59,10 +60,27 @@ const emit = defineEmits<{
   editClick: [value: any]
 }>()
 
+const isQuery = usePermission(`${props.contentConfig.pageName}:query`)
+const isCreate = usePermission(`${props.contentConfig.pageName}:create`)
+// const isUpdate = permissions.value.includes(`${props.contentConfig.pageName}:update`)
+// const isDelete = permissions.value.includes(`${props.contentConfig.pageName}:delete`)
 const currentPage = ref(1)
 const pageSize = ref(10)
 const systemStore = useSystemStore()
 const { pageList, pageTotalCount } = storeToRefs(systemStore)
+
+systemStore.$onAction(({ name, after }) => {
+  if (
+    name === "newPageDataAction" ||
+    name === "editPageDataAction" ||
+    name === "deletePageByIdAction"
+  ) {
+    // 成功之后执行回调
+    after(() => {
+      currentPage.value = 1
+    })
+  }
+})
 
 fetchPageListData()
 
@@ -74,6 +92,7 @@ const handleSizeChange = () => {
 }
 
 function fetchPageListData(formData: any = {}) {
+  if (!isQuery) return
   const size = pageSize.value
   const offset = (currentPage.value - 1) * size
   const info = { size, offset }

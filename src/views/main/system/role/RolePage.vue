@@ -51,7 +51,7 @@ import { ElTree } from "element-plus"
 import "element-plus/theme-chalk/el-tree.css"
 
 const { contentRef, handleResetClick, handleQueryClick } = usePageContent()
-const { modalRef, handleEditClick, handleNewClick } = usePageModal(editCallback)
+const { modalRef, handleEditClick, handleNewClick } = usePageModal(newCallback, editCallback)
 
 const systemStore = useSystemStore()
 const handleDeleteClick = (id: number) => {
@@ -71,6 +71,12 @@ const otherInfo = ref({})
 const handleTreeCheck = (data1: any, data2: any) => {
   const menuList = [...data2.checkedKeys, ...data2.halfCheckedKeys]
   otherInfo.value = { menuList }
+}
+
+function newCallback() {
+  nextTick(() => {
+    treeRef.value?.setCheckedKeys([])
+  })
 }
 
 function editCallback(itemData: any) {

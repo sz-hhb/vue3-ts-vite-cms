@@ -9,10 +9,22 @@
       <template #createAt="scope">{{ formatUTC(scope.row.createAt) }}</template>
       <template #updateAt="scope">{{ formatUTC(scope.row.updateAt) }}</template>
       <template #operation="scope">
-        <el-button text type="primary" icon="Edit" @click="handleEditClick(scope.row)">
+        <el-button
+          v-if="isUpdate"
+          text
+          type="primary"
+          icon="Edit"
+          @click="handleEditClick(scope.row)"
+        >
           编辑
         </el-button>
-        <el-button text type="danger" icon="Delete" @click="handleDeleteClick(scope.row.id)">
+        <el-button
+          v-if="isDelete"
+          text
+          type="danger"
+          icon="Delete"
+          @click="handleDeleteClick(scope.row.id)"
+        >
           删除
         </el-button>
       </template>
@@ -34,6 +46,7 @@ import useSystemStore from "@/store/main/system/system"
 import useMainStore from "@/store/main/main"
 import usePageContent from "@/hooks/usePageContent"
 import usePageModal from "@/hooks/usePageModal"
+import usePermissions from "@/hooks/usePermissions"
 
 const modalConfigRef = computed(() => {
   const mainStore = useMainStore()
@@ -47,6 +60,9 @@ const modalConfigRef = computed(() => {
   })
   return modalConfig
 })
+
+const isUpdate = usePermissions("department:update")
+const isDelete = usePermissions("department:delete")
 
 const { contentRef, handleResetClick, handleQueryClick } = usePageContent()
 const { modalRef, handleNewClick, handleEditClick } = usePageModal()
