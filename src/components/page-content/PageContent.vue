@@ -7,7 +7,7 @@
       </el-button>
     </div>
     <div class="table">
-      <el-table :data="pageList" border style="width: 100%">
+      <el-table :data="pageList" border style="width: 100%" v-bind="contentConfig.childrenTree">
         <template v-for="item in contentConfig.propsList" :key="item.prop">
           <template v-if="item.type === 'custom'">
             <el-table-column align="center" v-bind="item">
@@ -22,7 +22,7 @@
         </template>
       </el-table>
     </div>
-    <div class="pagination">
+    <div v-if="pageTotalCount" class="pagination">
       <el-pagination
         v-model:current-page="currentPage"
         v-model:page-size="pageSize"
@@ -49,6 +49,7 @@ interface IProps {
       btnText?: string
     }
     propsList: any[]
+    childrenTree?: any
   }
 }
 const props = defineProps<IProps>()

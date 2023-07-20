@@ -67,6 +67,10 @@ import { storeToRefs } from "pinia"
 import useMainStore from "@/store/main/main"
 import useSystemStore from "@/store/main/system/system"
 
+const emit = defineEmits<{
+  resetPaginationValue: []
+}>()
+
 const dialogVisible = ref(false)
 
 const formData = reactive<any>({
@@ -103,9 +107,29 @@ const setModalVisible = (isNew: boolean = true, itemData?: any) => {
 const handleConfirmClick = () => {
   dialogVisible.value = false
   if (!isCreate.value) {
-    systemStore.editUserDataAction(editData.value.id, formData)
+    // systemStore.editUserDataAction(editData.value.id, formData)
+    editUserData()
   } else {
-    systemStore.newUserDataAction(formData)
+    // systemStore.newUserDataAction(formData)
+    newUserData()
+  }
+}
+
+async function editUserData() {
+  try {
+    await systemStore.editUserDataAction(editData.value.id, formData)
+    emit("resetPaginationValue")
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+async function newUserData() {
+  try {
+    await systemStore.newUserDataAction(formData)
+    emit("resetPaginationValue")
+  } catch (e) {
+    console.log(e)
   }
 }
 

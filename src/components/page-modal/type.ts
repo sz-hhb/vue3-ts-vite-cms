@@ -1,8 +1,9 @@
 export interface IFormItems {
-  type: "input" | "select" | "date-picker"
+  type: "input" | "select" | "date-picker" | "custom"
   label: string
   prop: string
   placeholder: string
+  slotName?: string
   options?: { label: string | number; value: string | number | boolean | object }[]
 }
 
@@ -17,4 +18,5 @@ export interface IModalConfig {
 
 export interface IModalProps {
   modalConfig: IModalConfig
+  otherInfo?: any
 }

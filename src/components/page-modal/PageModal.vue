@@ -2,7 +2,7 @@
   <div class="user-modal">
     <el-dialog
       v-model="dialogVisible"
-      :title="isCreate ? '新建用户' : '编辑用户'"
+      :title="isCreate ? modalConfig.header.newText : modalConfig.header.editText"
       width="30%"
       center
     >
@@ -33,6 +33,9 @@
                   end-placeholder="结束时间"
                 />
               </template>
+              <template v-if="item.type === 'custom'">
+                <slot :name="item.slotName"></slot>
+              </template>
             </el-form-item>
           </template>
         </el-form>
@@ -58,7 +61,9 @@ const dialogVisible = ref(false)
 
 let initialForm: any = {}
 for (const item of props.modalConfig.formItems) {
-  initialForm[item.prop] = ""
+  if (item.prop) {
+    initialForm[item.prop] = ""
+  }
 }
 const formData = reactive<any>(initialForm)
 
@@ -86,10 +91,14 @@ const setModalVisible = (isNew: boolean = true, itemData?: any) => {
 
 const handleConfirmClick = () => {
   dialogVisible.value = false
+  let infoData = formData
+  if (props.otherInfo) {
+    infoData = { ...infoData, ...props.otherInfo }
+  }
   if (!isCreate.value) {
-    systemStore.editPageDataAction(props.modalConfig.pageName, editData.value.id, formData)
+    systemStore.editPageDataAction(props.modalConfig.pageName, editData.value.id, infoData)
   } else {
-    systemStore.newPageDataAction(props.modalConfig.pageName, formData)
+    systemStore.newPageDataAction(props.modalConfig.pageName, infoData)
   }
 }
 

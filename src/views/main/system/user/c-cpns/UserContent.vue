@@ -71,17 +71,19 @@ const currentPage = ref(1)
 const pageSize = ref(10)
 const systemStore = useSystemStore()
 const { usersList, userTotalCount } = storeToRefs(systemStore)
+const searchData = ref({})
 
 fetchUsersListData()
 
 const handleCurrentChange = () => {
-  fetchUsersListData()
+  fetchUsersListData(searchData.value)
 }
 const handleSizeChange = () => {
   fetchUsersListData()
 }
 
 function fetchUsersListData(formData: any = {}) {
+  searchData.value = formData
   const size = pageSize.value
   const offset = (currentPage.value - 1) * size
   const info = { size, offset }
@@ -101,8 +103,14 @@ const handleEditClick = (itemData: any) => {
   emit("editClick", itemData)
 }
 
+const resetPaginationValue = () => {
+  currentPage.value = 1
+  pageSize.value = 10
+}
+
 defineExpose({
-  fetchUsersListData
+  fetchUsersListData,
+  resetPaginationValue
 })
 </script>
 

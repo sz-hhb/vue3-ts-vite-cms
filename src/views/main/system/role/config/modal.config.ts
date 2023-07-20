@@ -8,7 +8,8 @@ const modalConfig: IModalConfig = {
   },
   formItems: [
     { type: "input", label: "角色名称", prop: "name", placeholder: "请输入角色名称" },
-    { type: "input", label: "角色权限", prop: "intro", placeholder: "请输入角色权限" }
+    { type: "input", label: "角色权限", prop: "intro", placeholder: "请输入角色权限" },
+    { type: "custom", label: "", prop: "", placeholder: "", slotName: "menuList" }
   ]
 }
 

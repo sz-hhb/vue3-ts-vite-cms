@@ -2,7 +2,7 @@
   <div class="user">
     <user-search @reset-click="handleResetClick" @query-click="handleQueryClick" />
     <user-content ref="contentRef" @new-click="handleNewUserClick" @edit-click="handleEditClick" />
-    <user-modal ref="modalRef" />
+    <user-modal ref="modalRef" @reset-pagination-value="resetPaginationValue" />
   </div>
 </template>
 
@@ -18,6 +18,9 @@ const handleResetClick = () => {
 }
 const handleQueryClick = (formData: any) => {
   contentRef.value?.fetchUsersListData(formData)
+}
+const resetPaginationValue = () => {
+  contentRef.value?.resetPaginationValue()
 }
 
 const modalRef = ref<InstanceType<typeof UserModal>>()
