@@ -2,35 +2,35 @@
   <div class="dashboard">
     <el-row :gutter="20">
       <template v-for="item in amountList" :key="item">
-        <el-col :span="6">
+        <el-col v-bind="{ xs: 24, sm: 24, md: 12, lg: 12, xl: 6 }">
           <count-card v-bind="item" />
         </el-col>
       </template>
     </el-row>
     <el-row :gutter="10">
-      <el-col :span="7">
+      <el-col v-bind="{ xs: 24, sm: 24, md: 24, lg: 7, xl: 7 }">
         <chart-card title="所有商品的个数">
           <pie-echart :pie-data="showGoodsCategoryCount" />
         </chart-card>
       </el-col>
-      <el-col :span="10">
+      <el-col v-bind="{ xs: 24, sm: 24, md: 24, lg: 10, xl: 10 }">
         <chart-card title="不同城市的销量">
           <map-echart :map-data="showGoodsAddressSale" />
         </chart-card>
       </el-col>
-      <el-col :span="7">
+      <el-col v-bind="{ xs: 24, sm: 24, md: 24, lg: 7, xl: 7 }">
         <chart-card title="所有商品的销量">
           <rose-echart :rose-data="showGoodsCategorySale" />
         </chart-card>
       </el-col>
     </el-row>
     <el-row :gutter="10">
-      <el-col :span="12">
+      <el-col v-bind="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12 }">
         <chart-card title="所有商品的收藏">
           <line-echart v-bind="showGoodsCategoryFavor" />
         </chart-card>
       </el-col>
-      <el-col :span="12">
+      <el-col v-bind="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12 }">
         <chart-card title="所有商品的收藏">
           <bar-echart v-bind="showGoodsCategoryFavor" />
         </chart-card>

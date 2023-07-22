@@ -25,11 +25,19 @@ onMounted(() => {
   watchEffect(() => {
     props.option && echartInstance?.setOption(props.option, true)
   })
+
+  window.addEventListener("resize", resizeEchart)
 })
 
 onUnmounted(() => {
   echartInstance?.dispose()
+
+  window.removeEventListener("resize", resizeEchart)
 })
+
+function resizeEchart() {
+  echartInstance?.resize()
+}
 </script>
 
 <style scoped lang="less">
