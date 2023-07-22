@@ -8,7 +8,7 @@
     >
       <el-row :gutter="20">
         <template v-for="item in searchConfig.formItems" :key="item.prop">
-          <el-col :span="8">
+          <el-col v-bind="{ xs: 24, sm: 24, md: 12, lg: 8, xl: 8 }">
             <el-form-item :label="item.label" :prop="item.prop">
               <template v-if="item.type === 'input'">
                 <el-input v-model="searchForm[item.prop]" :placeholder="item.placeholder" />
