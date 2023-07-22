@@ -5,3 +5,9 @@ export function getGoodsListData() {
     url: "/goods/list"
   })
 }
+
+export function deleteGoodById(id: number) {
+  return hyRequest.delete({
+    url: `/goods/${id}`
+  })
+}

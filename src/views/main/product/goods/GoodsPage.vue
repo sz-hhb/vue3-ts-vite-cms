@@ -1,6 +1,6 @@
 <template>
   <div class="goods-page">
-    <page-content :content-config="contentConfig">
+    <page-content :content-config="contentConfig" @new-click="handleNewClick">
       <template #oldPrice="scope">
         <span>{{ "¥" + scope.row.oldPrice }}</span>
       </template>
@@ -26,9 +26,11 @@
       <template #updateAt="scope">
         <span>{{ formatUTC(scope.row.updateAt) }}</span>
       </template>
-      <template #operation>
-        <el-button text type="primary" icon="Edit">编辑</el-button>
-        <el-button text type="danger" icon="Delete">删除</el-button>
+      <template #operation="scope">
+        <el-button text type="primary" icon="Edit" @click="handleEditClick">编辑</el-button>
+        <el-button text type="danger" icon="Delete" @click="handleDeleteClick(scope.row.id)">
+          删除
+        </el-button>
       </template>
     </page-content>
   </div>
@@ -37,11 +39,16 @@
 <script setup lang="ts" name="goods">
 import PageContent from "@/components/page-content/PageContent.vue"
 import contentConfig from "./config/content.config"
-import useProductStore from "@/store/main/product/product"
+import useSystemStore from "@/store/main/system/system"
 import { formatUTC } from "@/utils/format"
+import usePageModal from "@/hooks/usePageModal"
 
-const productStore = useProductStore()
-productStore.fetchGoodsListDataAction()
+const systemStore = useSystemStore()
+const handleDeleteClick = (id: number) => {
+  systemStore.deletePageByIdAction(contentConfig.pageName, id)
+}
+
+const { modalRef, handleNewClick, handleEditClick } = usePageModal()
 </script>
 
 <style scoped lang="less">
